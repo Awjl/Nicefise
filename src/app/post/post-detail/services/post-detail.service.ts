@@ -9,14 +9,18 @@ import { Post } from '../../model/post-model';
 
 @Injectable()
 export class PostDetailService {
-    public postDetailURL = "mock-data/post-mock.json";
+    public postDetailURL = "api/post/postdetail/";
 
     constructor(public http: Http) { 
     }
 
-    public getPost(id:number):Observable<Post>{
+    public getPostDetail(id:String):Observable<Post>{
         return 	this.http
-        			.get(this.postDetailURL)
-                	.map((res: Response) => res.json());
+        			.get(this.postDetailURL+id)
+                	.map((res: Response) => {
+                		let result=res.json();
+                		console.log(result);
+                		return result;
+                	});
     }
 }

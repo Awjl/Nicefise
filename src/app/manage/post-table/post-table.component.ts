@@ -12,7 +12,6 @@ import { PostTableService } from './services/post-table.service';
   ]
 })
 export class PostTableComponent implements OnInit {
-    @Input() dataURL:string="mock-data/postlist-mock.json";
 
 	  public postList:Array<any>;
     public maxSize:number = 5;
@@ -21,12 +20,9 @@ export class PostTableComponent implements OnInit {
     public currentPage:number = 1;
     public numPages
 
-  	constructor(
-        public router: Router,
+  	constructor(public router: Router,
         public activeRoute: ActivatedRoute,
-        public postTableService: PostTableService
-    ) {
-      
+        public postTableService: PostTableService) {
     }
 
   	ngOnInit() {
@@ -37,7 +33,7 @@ export class PostTableComponent implements OnInit {
 
     public getPostsByPage(page:Number){
       console.log("页码>"+page);
-      return this.postTableService.getPostTable(this.dataURL).subscribe(
+      return this.postTableService.getPostTable().subscribe(
         res=>{
           console.log(res);
           this.postList=res.items;

@@ -12,12 +12,12 @@ import { Post } from '../model/post-model';
   styleUrls: ['./postlist.component.scss']
 })
 export class PostlistComponent implements OnInit {
-	public maxSize:number = 5;
-	public itemsPerPage:number=5;
-	public totalItems:number;
+	public maxSize:number = 10;
+	public itemsPerPage:number=2;
+	public totalItems:number=0;
 	//不要手动对这个属性进行赋值，它是和分页工具条自动绑定的
 	public currentPage:number = 1;
-	public numPages
+	public numPages=0;
 
 	public searchText:string;
 	public searchTextStream:Subject<string> = new Subject<string>();
@@ -39,6 +39,8 @@ export class PostlistComponent implements OnInit {
 			this.loadData(this.searchText,this.currentPage);
    		});
 
+   		this.loadTotalPages();
+
 		this.searchTextStream
 	        .debounceTime(500)
 	        .distinctUntilChanged()
@@ -49,20 +51,26 @@ export class PostlistComponent implements OnInit {
   	}
 
   	public loadData(searchText:string,page:number){
-		let offset = (this.currentPage-1)*this.itemsPerPage;
-		let end = (this.currentPage)*this.itemsPerPage;
-
 		return this.postService.getPostList(searchText,page).subscribe(
 			res=>{
-				this.totalItems = res["total"];
-				//TODO.正式环境中，需要去掉slice
-				this.postList = res["items"].slice(offset,end>this.totalItems?this.totalItems:end);
+				this.postList=res;
 			},
 			error => {console.log(error)},
 			() => {}
 		);
 	}
-	
+
+	public loadTotalPages(){
+		return this.postService.getPagerData().subscribe(
+			res=>{
+				this.totalItems=res.totalItems;
+				this.itemsPerPage=res.itemsPerPage;
+			},
+			error=>{},
+			()=>{}
+		);
+	}
+
 	public pageChanged(event:any):void {
 		this.router.navigateByUrl("posts/page/"+event.page);
 	}
@@ -71,8 +79,8 @@ export class PostlistComponent implements OnInit {
 		this.searchTextStream.next(this.searchText);
 	}
 
-	public gotoWrite():void{
-		//TODO：如果没有登录，跳转到登录页，如果已登录，跳往写作页
-		this.router.navigateByUrl("user/write");
-	}
+	// public gotoWrite():void{
+	// 	//TODO：如果没有登录，跳转到登录页，如果已登录，跳往写作页
+	// 	this.router.navigateByUrl("user/write");
+	// }
 }
