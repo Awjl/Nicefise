@@ -40,11 +40,7 @@ NiceFish可以用来搭建个人Blog、微型SNS站点，或者用于学习Angul
 
 ![视频教程截图](src/assets/imgs/10.png)
 
-## 演示地址
-
-阿里云上的演示地址：http://121.196.220.118:8081/
-
-以下是效果图：
+## 效果图
 
 ![效果图](src/assets/imgs/1.png)
 
